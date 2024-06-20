@@ -1,3 +1,4 @@
+// add: additional all
 // setup: setup like projects,library and other third party library.
 // update : update likes ui,library,components and any other updates.
 // build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
@@ -32,6 +33,7 @@ module.exports = {
       2,
       'always',
       [
+        'add',
         'setup',
         'update',
         'build',
