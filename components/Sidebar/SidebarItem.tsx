@@ -13,7 +13,7 @@ type itemType = {
 interface SidebarItemProps {
   item: itemType;
   pageName: string;
-  setPageName: (value: string) => void;
+  setPageName: (_: string) => void;
 }
 
 const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
@@ -47,7 +47,7 @@ const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
           )}
         >
           {item.icon}
-          <Text label={item.label} size="sm" />
+          <Text label={item.label} size="sm" active={isItemActive} />
           {/* <p
             className={classNames(
               'text-[12px] font-medium',

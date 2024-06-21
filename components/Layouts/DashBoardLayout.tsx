@@ -12,12 +12,9 @@ export default function DashBoardLayout({
     <>
       <div className="flex h-screen overflow-hidden">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="relative flex flex-col overflow-y-auto overflow-x-hidden">
-          {/* <h1>Headers</h1> */}
-          <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-              {children}
-            </div>
+        <div className="relative w-full flex flex-col overflow-y-auto overflow-x-hidden">
+          <main className="mt-[58px]">
+            <div className="mx-auto  p-4 md:p-6 2xl:p-10">{children}</div>
           </main>
         </div>
       </div>
