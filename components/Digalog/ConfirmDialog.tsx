@@ -9,21 +9,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useState } from 'react';
+import useDialog from '@/store/useDialog';
+import { useRouter } from 'next/navigation';
 
 export function ConfirmDialog() {
-  const [isOpen, setOpen] = useState(true);
+  const router = useRouter();
+  const { open, type, confirmRoute, closeDialog } = useDialog();
 
   const handleCancel = () => {
-    setOpen(false);
+    closeDialog();
   };
 
   const handleConfirm = () => {
-    setOpen(false);
+    if (type === 'route' && confirmRoute) {
+      router.push(confirmRoute);
+    }
   };
 
   return (
-    <AlertDialog open={isOpen}>
+    <AlertDialog open={open}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

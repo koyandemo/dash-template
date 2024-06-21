@@ -1,6 +1,7 @@
 'use client';
 import Sidebar from '@/components/Sidebar';
 import React, { useState } from 'react';
+import { ConfirmDialog } from '../Digalog/ConfirmDialog';
 
 export default function DashBoardLayout({
   children,
@@ -17,6 +18,7 @@ export default function DashBoardLayout({
             <div className="mx-auto  p-4 md:p-6 2xl:p-10">{children}</div>
           </main>
         </div>
+        <ConfirmDialog />
       </div>
     </>
   );

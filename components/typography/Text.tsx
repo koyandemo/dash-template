@@ -1,4 +1,4 @@
-import { classNames } from '@/utils';
+import { classNames } from '@/lib/utils';
 
 type TextProps = {
   label: string;

@@ -3,7 +3,7 @@
 import ClickOutside from '@/components/ClickOutside';
 import SidebarItem from '@/components/Sidebar/SidebarItem';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { menuGroups, menuItemLogout } from '@/utils/initData';
+import { menuGroups, menuItemLogout } from '@/lib/initData';
 import Image from 'next/image';
 import Link from 'next/link';
 

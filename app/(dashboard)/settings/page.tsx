@@ -1,11 +1,5 @@
-import { ConfirmDialog } from '@/components/Digalog/ConfirmDialog';
-
 const SettingsPage = () => {
-  return (
-    <div>
-      <ConfirmDialog />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default SettingsPage;

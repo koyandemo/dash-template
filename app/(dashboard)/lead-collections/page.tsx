@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { leadCollectionDatas } from '@/utils/initData';
-import { MoreIcon } from '@/utils/shreIcon';
+import { leadCollectionDatas } from '@/lib/initData';
+import { MoreIcon } from '@/lib/shreIcon';
 
 const LeadCollections = () => {
   return (
