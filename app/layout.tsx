@@ -1,3 +1,4 @@
+import Providers from '@/lib/Providers';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -23,7 +24,7 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

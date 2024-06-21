@@ -1,6 +1,7 @@
+'use client';
+
 import { classNames } from '@/utils';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import Text from '../typography/Text';
 
@@ -17,10 +18,17 @@ interface SidebarItemProps {
 }
 
 const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
+  const router = useRouter();
+
   const handleClick = () => {
     const updatedPageName =
       pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : '';
-    return setPageName(updatedPageName);
+    setPageName(updatedPageName);
+    if (item.route === '/sign-in') {
+      alert('hello');
+    } else {
+      router.push(item.route);
+    }
   };
 
   const pathname = usePathname();
@@ -38,11 +46,11 @@ const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
   return (
     <>
       <li>
-        <Link
-          href={item.route}
+        <div
+          // href={item.route}
           onClick={handleClick}
           className={classNames(
-            'group relative flex items-center  gap-[20px] rounded-sm px-4 py-3 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4',
+            'group relative flex items-center  gap-[20px] rounded-sm px-4 py-3 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 cursor-pointer',
             `${isItemActive ? 'bg-[#F7F7F7] rounded-[5px]' : ''}`
           )}
         >
@@ -75,7 +83,7 @@ const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
               />
             </svg>
           )} */}
-        </Link>
+        </div>
       </li>
     </>
   );
