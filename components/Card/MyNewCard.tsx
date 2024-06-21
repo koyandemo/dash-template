@@ -1,4 +1,4 @@
-import { PlusIcon } from '@/utils/shreIcon';
+import { PlusIcon } from '@/lib/shreIcon';
 import Text from '../typography/Text';
 
 const MyNewCard = () => {
