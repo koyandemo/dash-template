@@ -1,7 +1,6 @@
 'use client';
 
 import { classNames } from '@/lib/utils';
-import useDialog from '@/store/useDialog';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import Text from '../typography/Text';
@@ -20,17 +19,11 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
   const router = useRouter();
-  const { openDialog } = useDialog();
-
   const handleClick = () => {
     const updatedPageName =
       pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : '';
     setPageName(updatedPageName);
-    if (item.route === '/sign-in') {
-      openDialog('route', '/sign-in');
-    } else {
-      router.push(item.route);
-    }
+    router.push(item.route);
   };
 
   const pathname = usePathname();

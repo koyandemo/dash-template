@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '../button/Button';
 import Text from '../typography/Text';
 
@@ -13,8 +15,8 @@ const MyCard = () => {
         <Text label="Bonnie Green" />
         <Text label="Visual Designer" size="sm" classes="text-gray-500" />
         <div className="flex gap-5 mt-4 md:mt-6">
-          <Button label="Edit" />
-          <Button label="View" />
+          <Button label="Edit" callBack={() => {}} />
+          <Button label="View" callBack={() => {}} />
         </div>
       </div>
     </div>

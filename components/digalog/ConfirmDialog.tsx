@@ -1,8 +1,6 @@
 'use client';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -11,6 +9,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import useDialog from '@/store/useDialog';
 import { useRouter } from 'next/navigation';
+import Button from '../button/Button';
 
 export function ConfirmDialog() {
   const router = useRouter();
@@ -37,8 +36,8 @@ export function ConfirmDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+          <Button label="Cancle" isOutline={true} callBack={handleCancel} />
+          <Button label="Confirm" callBack={handleConfirm} />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

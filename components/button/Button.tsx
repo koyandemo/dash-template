@@ -1,10 +1,36 @@
+import { classNames } from '@/lib/utils';
+
+// enum widthTypeEnum {
+//   padding = 'padding',
+//   fixed = 'fixed',
+//   full = 'full',
+// }
+
 type ButtonProps = {
   label: string;
+  widthType?: 'padding' | 'full';
+  isOutline?: boolean;
+  classes?: string;
+  callBack: () => void;
 };
 
-const Button = ({ label }: ButtonProps) => {
+const Button = ({
+  label,
+  widthType = 'padding',
+  isOutline,
+  classes = '',
+  callBack,
+}: ButtonProps) => {
   return (
-    <button className="bg-[#6D3DF5] text-white font-bold py-1 px-10 w-full rounded-md hover:bg-blue-500">
+    <button
+      className={classNames(
+        'font-bold py-1 px-5 rounded-sm',
+        `${widthType === 'full' ? 'w-full' : ''}`,
+        `${isOutline ? 'border border-primary' : 'bg-primary text-white'}`,
+        `${classes}`
+      )}
+      onClick={callBack}
+    >
       {label}
     </button>
   );

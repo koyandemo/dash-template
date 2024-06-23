@@ -1,6 +1,6 @@
 import {
-  AuthenticationIcon,
   DashboardIcon,
+  LogoutIcon,
   ProfileIcon,
   SettingIcon,
   TeamIcon,
@@ -35,7 +35,7 @@ export const menuGroups = [
 ];
 
 export const menuItemLogout = {
-  icon: <AuthenticationIcon />,
+  icon: <LogoutIcon />,
   label: 'Logout',
   route: '/sign-in',
 };

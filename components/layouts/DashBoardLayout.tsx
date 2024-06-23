@@ -17,10 +17,12 @@ export default function DashBoardLayout({
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <main>
-            <div className="mx-auto  p-6 pt-[50px] z-">{children}</div>
+            <div className="mx-auto  p-6 pt-[50px]">{children}</div>
           </main>
         </div>
-        <ConfirmDialog />
+        <div>
+          <ConfirmDialog />
+        </div>
       </div>
     </>
   );

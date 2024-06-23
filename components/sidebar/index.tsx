@@ -3,7 +3,7 @@
 import ClickOutside from '@/components/ClickOutside';
 import SidebarItem from '@/components/sidebar/SidebarItem';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { menuGroups, menuItemLogout } from '@/lib/initData';
+import { menuGroups } from '@/lib/initData';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -76,7 +76,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </nav>
           </div>
         </div>
-        <div className="pb-2 border-t">
+        {/* <div className="pb-2 border-t">
           <ul>
             <SidebarItem
               item={menuItemLogout}
@@ -84,7 +84,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               setPageName={setPageName}
             />
           </ul>
-        </div>
+        </div> */}
       </aside>
     </ClickOutside>
   );
