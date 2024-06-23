@@ -1,5 +1,5 @@
-import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
+import Button from '@/components/button/Button';
+import Input from '@/components/input/Input';
 
 const SignInPage = () => {
   return (

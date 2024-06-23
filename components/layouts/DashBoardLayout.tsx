@@ -1,7 +1,8 @@
 'use client';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/sidebar';
 import React, { useState } from 'react';
-import { ConfirmDialog } from '../Digalog/ConfirmDialog';
+import { ConfirmDialog } from '../digalog/ConfirmDialog';
+import Header from '../header';
 
 export default function DashBoardLayout({
   children,
@@ -13,9 +14,10 @@ export default function DashBoardLayout({
     <>
       <div className="flex h-screen overflow-hidden">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="relative w-full flex flex-col overflow-y-auto overflow-x-hidden">
-          <main className="mt-[58px]">
-            <div className="mx-auto  p-4 md:p-6 2xl:p-10">{children}</div>
+        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <main>
+            <div className="mx-auto  p-6 pt-[50px] z-">{children}</div>
           </main>
         </div>
         <ConfirmDialog />

@@ -1,5 +1,5 @@
-import MyCard from '@/components/Card/MyCard';
-import MyNewCard from '@/components/Card/MyNewCard';
+import MyCard from '@/components/card/MyCard';
+import MyNewCard from '@/components/card/MyNewCard';
 
 const MyCardsPage = () => {
   return (
