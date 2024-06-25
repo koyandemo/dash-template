@@ -42,3 +42,15 @@ export type LeadAlphabetType = {
   first_letter: string;
   contacts: LeadContactType[];
 };
+
+export type CountryType = {
+  id: number;
+  name: string;
+};
+
+export type IndustryType = {
+  id: number;
+  name: string;
+  image: string;
+  other_status: number;
+};

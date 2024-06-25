@@ -1,11 +1,11 @@
 'use client';
 
-import { getCards } from '@/src/@pi/cardApi';
-import MyCard from '@/src/components/card/MyCard';
-import MyNewCard from '@/src/components/card/MyNewCard';
-import getErrorMessage from '@/src/lib/getErrorMessage';
-import { CardType } from '@/src/types/card';
-import { ApiResponse } from '@/src/types/init';
+import { getCards } from '@/@pi/cardApi';
+import MyCard from '@/components/card/MyCard';
+import MyNewCard from '@/components/card/MyNewCard';
+import getErrorMessage from '@/lib/getErrorMessage';
+import { CardType } from '@/types/card';
+import { ApiResponse } from '@/types/init';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -34,6 +34,7 @@ const MyCardsPage = () => {
       const data = { error: false, data: res?.data?.data, message: '' };
       setCards(data);
     } catch (err) {
+      console.error(err);
       const data = { error: true, data: null, message: getErrorMessage(err) };
       setCards(data);
     }

@@ -1,5 +1,5 @@
-import Providers from '@/src/lib/Providers';
-import { cn } from '@/src/lib/utils';
+import Providers from '@/lib/Providers';
+import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';

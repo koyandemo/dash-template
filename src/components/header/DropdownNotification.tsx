@@ -1,4 +1,4 @@
-import ClickOutside from '@/src/components/ClickOutside';
+import ClickOutside from '@/components/ClickOutside';
 import Link from 'next/link';
 import { useState } from 'react';
 

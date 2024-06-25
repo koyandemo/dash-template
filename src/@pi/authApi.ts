@@ -1,4 +1,4 @@
-import { loginUserType, UserType } from '@/src/types/auth';
+import { loginUserType, UserType } from '@/types/auth';
 import { apiConfig } from './apiConfig';
 
 export const logInUser = async (

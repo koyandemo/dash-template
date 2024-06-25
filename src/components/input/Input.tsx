@@ -1,4 +1,4 @@
-import { classNames } from '@/src/lib/utils';
+import { classNames } from '@/lib/utils';
 import { ChangeEvent } from 'react';
 
 type InputProps = {

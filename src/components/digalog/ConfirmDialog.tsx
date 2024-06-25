@@ -6,8 +6,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/src/components/ui/alert-dialog';
-import useDialog from '@/src/store/useDialog';
+} from '@/components/ui/alert-dialog';
+import useDialog from '@/store/useDialog';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Button from '../button/Button';
 
@@ -21,7 +22,9 @@ export function ConfirmDialog() {
 
   const handleConfirm = () => {
     if (type === 'route' && confirmRoute) {
-      router.push(confirmRoute);
+      if (confirmRoute === '/sign-in') {
+        signOut({ callbackUrl: confirmRoute });
+      }
     }
   };
 

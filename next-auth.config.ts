@@ -1,4 +1,4 @@
-import { logInUser, signInUser } from '@/src/@pi/authApi';
+import { logInUser, signInUser } from '@/@pi/authApi';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -44,10 +44,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
   },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/sign-in',
   },

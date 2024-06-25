@@ -1,6 +1,6 @@
 'use client';
 
-import { CardType } from '@/src/types/card';
+import { CardType } from '@/types/card';
 import Button from '../button/Button';
 import Text from '../typography/Text';
 

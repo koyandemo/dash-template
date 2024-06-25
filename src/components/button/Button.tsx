@@ -1,4 +1,4 @@
-import { classNames } from '@/src/lib/utils';
+import { classNames } from '@/lib/utils';
 
 // enum widthTypeEnum {
 //   padding = 'padding',
@@ -11,6 +11,7 @@ type ButtonProps = {
   widthType?: 'padding' | 'full';
   isOutline?: boolean;
   classes?: string;
+  disabled?: boolean;
   callBack: () => void;
 };
 
@@ -19,10 +20,12 @@ const Button = ({
   widthType = 'padding',
   isOutline,
   classes = '',
+  disabled = false,
   callBack,
 }: ButtonProps) => {
   return (
     <button
+      disabled={disabled}
       className={classNames(
         'font-bold py-1 px-5 rounded-sm',
         `${widthType === 'full' ? 'w-full' : ''}`,

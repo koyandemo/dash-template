@@ -1,12 +1,12 @@
-import ClickOutside from '@/src/components/ClickOutside';
+import ClickOutside from '@/components/ClickOutside';
 import {
   AngleDownIcon,
   ContactIcon,
   LogoutIcon,
   ProfileIcon,
   SettingIcon,
-} from '@/src/lib/shreIcon';
-import useDialog from '@/src/store/useDialog';
+} from '@/lib/shreIcon';
+import useDialog from '@/store/useDialog';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';

@@ -1,14 +1,15 @@
 'use client';
 
-import { GoogleIcon } from '@/src/lib/shreIcon';
+import { GoogleIcon } from '@/lib/shreIcon';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import Button from '../button/Button';
 import Input from '../input/Input';
 
-const LoginForm = () => {
+const SignInForm = () => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [authData, setAuthData] = useState({
     email: '',
     password: '',
@@ -16,15 +17,17 @@ const LoginForm = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await signIn('credentials', {
-        email: authData.email,
-        password: authData.password,
-        redirect: false,
+      startTransition(async () => {
+        const res = await signIn('credentials', {
+          email: authData.email,
+          password: authData.password,
+          redirect: false,
+        });
+        console.log(res, '24');
+        if (!res?.error) {
+          router.push('/');
+        }
       });
-      console.log(res, '24');
-      if (!res?.error) {
-        router.push('/');
-      }
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +76,8 @@ const LoginForm = () => {
       </div>
       <div className="mt-8">
         <Button
-          label="Login"
+          label={isPending ? 'Loading ...' : 'Login'}
+          disabled={isPending}
           callBack={handleLogin}
           widthType="full"
           classes="h-[45px]"
@@ -98,4 +102,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignInForm;

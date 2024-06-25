@@ -1,6 +1,6 @@
 'use client';
 
-import { classNames } from '@/src/lib/utils';
+import { classNames } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import Text from '../typography/Text';

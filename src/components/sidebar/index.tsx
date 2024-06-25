@@ -1,9 +1,9 @@
 'use client';
 
-import ClickOutside from '@/src/components/ClickOutside';
-import SidebarItem from '@/src/components/sidebar/SidebarItem';
-import useLocalStorage from '@/src/hooks/useLocalStorage';
-import { menuGroups } from '@/src/lib/initData';
+import ClickOutside from '@/components/ClickOutside';
+import SidebarItem from '@/components/sidebar/SidebarItem';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import { menuGroups } from '@/lib/initData';
 import Image from 'next/image';
 import Link from 'next/link';
 
