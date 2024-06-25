@@ -27,26 +27,27 @@ import {
 } from '@/types/lead';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { MultiSelect } from 'primereact/multiselect';
 import { useEffect, useRef, useState } from 'react';
 
 type FilterDataType = {
   open: boolean;
   search: string;
   sort: string;
-  industry_id: number;
-  company_id: number;
-  job_id: number;
-  country_id: number;
+  industry_id: number[];
+  company_id: number[];
+  job_id: number[];
+  country_id: number[];
 };
 
 const initFilterData = {
   open: false,
   search: '',
   sort: 'az',
-  industry_id: 0,
-  company_id: 0,
-  job_id: 0,
-  country_id: 0,
+  industry_id: [],
+  company_id: [],
+  job_id: [],
+  country_id: [],
 };
 
 const LeadCollections = () => {
@@ -85,10 +86,9 @@ const LeadCollections = () => {
       const params = {
         search: filterData.search,
         sort: filterData.sort === 'az' ? '' : filterData.sort,
-        industry_id: +filterData.industry_id,
-        country_id: +filterData.country_id,
+        industry_id: filterData.industry_id.join(),
+        country_id: filterData.country_id.join(),
       };
-
       const res = await getLeads(token, params);
       const data = { error: false, data: res?.data?.data, message: '' };
       setLeads(data);
@@ -103,7 +103,16 @@ const LeadCollections = () => {
   const fetchCountries = async (token: string) => {
     try {
       const res = await getCountries(token);
-      setCountries(res?.data?.data);
+      const data = res?.data?.data?.map((data: CountryType) => {
+        return {
+          value: data.id,
+          name:
+            data.name.length > 20
+              ? data.name.slice(0, 20).concat('...')
+              : data.name,
+        };
+      });
+      setCountries(data);
     } catch (err) {
       console.error(err);
     }
@@ -112,7 +121,16 @@ const LeadCollections = () => {
   const fetchIndustries = async (token: string) => {
     try {
       const res = await getIndustries(token);
-      setIndustries(res?.data?.data);
+      const data = res?.data?.data?.map((data: IndustryType) => {
+        return {
+          value: data.id,
+          name:
+            data.name.length > 20
+              ? data.name.slice(0, 20).concat('...')
+              : data.name,
+        };
+      });
+      setIndustries(data);
     } catch (err) {
       console.error(err);
     }
@@ -140,12 +158,6 @@ const LeadCollections = () => {
   };
 
   const debounceSearch = debounce(handleSearch, 1000);
-
-  // if (loading) {
-  //   return (
-
-  //   );
-  // }
 
   const renderTableContact = (contact: LeadContactType, i: number) => {
     return (
@@ -224,6 +236,18 @@ const LeadCollections = () => {
     );
   };
 
+  // const handleFilter = (type: keyof FilterDataType, value: number) => {
+  //   let data = filterData[type];
+  //   if (Array.isArray(data)) {
+  //     data = [...data, value];
+  //     setFilterData({ ...filterData, [type]: data, open: true });
+  //   }
+  // };
+
+  const handleMultiSelectFilter = (type: string, values: string[]) => {
+    setFilterData({ ...filterData, [type]: values, open: true });
+  };
+
   return (
     <ClientContainer>
       <div className="flex flex-col gap-[30px]">
@@ -242,14 +266,63 @@ const LeadCollections = () => {
           </SelectDemo>
         </div>
         <div className="flex gap-5 mb-5 pb-8 border-b border-gray-200">
-          <div className="w-[300px]">
+          <div className="max-w-[300px]">
             <InputRef
               refObj={searchRef}
               callBack={debounceSearch}
               placeHolder={'search...'}
             />
           </div>
-          <SelectDemo
+
+          <MultiSelect
+            optionLabel="name"
+            placeholder="Select Jobs"
+            maxSelectedLabels={3}
+            className="w-[300px]"
+            options={countries}
+            value={filterData.country_id}
+            onChange={(e) => {
+              handleMultiSelectFilter('job_id', e.target.value);
+            }}
+          />
+
+          <MultiSelect
+            optionLabel="name"
+            placeholder="Select Industries"
+            maxSelectedLabels={3}
+            className="w-[300px]"
+            options={industries}
+            value={filterData.industry_id}
+            onChange={(e) =>
+              handleMultiSelectFilter('industry_id', e.target.value)
+            }
+          />
+
+          <MultiSelect
+            optionLabel="name"
+            placeholder="Select Lead Companies"
+            maxSelectedLabels={3}
+            className="w-[300px]"
+            options={countries}
+            value={filterData.country_id}
+            onChange={(e) => {
+              handleMultiSelectFilter('company_id', e.target.value);
+            }}
+          />
+
+          <MultiSelect
+            optionLabel="name"
+            placeholder="Select Countries"
+            maxSelectedLabels={3}
+            className="w-[300px]"
+            options={countries}
+            value={filterData.country_id}
+            onChange={(e) => {
+              handleMultiSelectFilter('country_id', e.target.value);
+            }}
+          />
+
+          {/* <SelectDemo
             placeHolder="Select a Job Title"
             value={filterData.job_id.toString()}
             label="Jobs"
@@ -299,16 +372,18 @@ const LeadCollections = () => {
               handleFilter('country_id', e);
             }}
           >
-            <SelectItem value="0">Select a Country</SelectItem>
+            . <SelectItem value="0">Select a Country</SelectItem>
             {countries.length > 0 &&
               countries.map((country: any) => (
                 <SelectItem value={country.id.toString()} key={country.id}>
                   {country.name}
                 </SelectItem>
               ))}
-          </SelectDemo>
+          </SelectDemo> */}
+
           {filterData.open && (
             <Button
+              type="button"
               label="Reset"
               callBack={() => {
                 handleReset();

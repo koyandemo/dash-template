@@ -7,6 +7,7 @@ import {
   SettingIcon,
 } from '@/lib/shreIcon';
 import useDialog from '@/store/useDialog';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -64,6 +65,7 @@ const DropDownItem = () => {
 };
 
 const DropdownUser = () => {
+  const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
@@ -75,13 +77,13 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Bonnie Green
+            {session?.user?.name}
           </span>
           <span className="block text-xs">User</span>
         </span>
         <figure>
           <Image
-            src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            src={'/default_profile.png'}
             width={40}
             height={40}
             style={{

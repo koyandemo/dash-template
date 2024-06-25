@@ -1,29 +1,44 @@
 'use client';
 
 import { GoogleIcon } from '@/lib/shreIcon';
+import { SignInSchema } from '@/types/schema/authSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import Button from '../button/Button';
-import Input from '../input/Input';
+import InputHook from '../input/InputHook';
 
 const SignInForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [authData, setAuthData] = useState({
-    email: '',
-    password: '',
+  // const [authData, setAuthData] = useState({
+  //   email: '',
+  //   password: '',
+  // });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof SignInSchema>>({
+    resolver: zodResolver(SignInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
-  const handleLogin = async () => {
+  const handleLogin = async (value: z.infer<typeof SignInSchema>) => {
     try {
       startTransition(async () => {
         const res = await signIn('credentials', {
-          email: authData.email,
-          password: authData.password,
+          email: value.email,
+          password: value.password,
           redirect: false,
         });
-        console.log(res, '24');
         if (!res?.error) {
           router.push('/');
         }
@@ -33,25 +48,18 @@ const SignInForm = () => {
     }
   };
 
-  const handleChange = (e: any) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    console.log(value);
-    setAuthData({ ...authData, [name]: value });
-  };
-
   return (
-    <>
+    <form onSubmit={handleSubmit(handleLogin)}>
       <div className="mt-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Email
         </label>
-        <Input
-          name="email"
+        <InputHook
+          id="email"
           type="email"
           placeholder="Email"
-          value={authData.email}
-          callBack={handleChange}
+          register={register('email', { required: true })}
+          error={errors['email']}
         />
       </div>
       <div className="mt-4 flex flex-col justify-between">
@@ -60,12 +68,12 @@ const SignInForm = () => {
             Password
           </label>
         </div>
-        <Input
-          name="password"
+        <InputHook
+          id="password"
           type="password"
-          placeholder="Password"
-          value={authData.password}
-          callBack={handleChange}
+          placeholder="********"
+          register={register('password', { required: true })}
+          error={errors['password']}
         />
         <a
           href="#"
@@ -76,9 +84,9 @@ const SignInForm = () => {
       </div>
       <div className="mt-8">
         <Button
+          type="submit"
           label={isPending ? 'Loading ...' : 'Login'}
           disabled={isPending}
-          callBack={handleLogin}
           widthType="full"
           classes="h-[45px]"
         />
@@ -98,7 +106,7 @@ const SignInForm = () => {
           </div>
         </div>
       </a>
-    </>
+    </form>
   );
 };
 

@@ -79,3 +79,11 @@
 body {
   background: #f7f7f7 !important;
 }
+
+.p-focus {
+  box-shadow: unset !important;
+}
+
+.p-highlight {
+  background: unset !important;
+}

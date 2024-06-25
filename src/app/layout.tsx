@@ -2,6 +2,8 @@ import Providers from '@/lib/Providers';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { PrimeReactProvider } from 'primereact/api';
+import 'primereact/resources/themes/lara-light-blue/theme.css';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -24,7 +26,9 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <Providers>{children}</Providers>
+        <PrimeReactProvider>
+          <Providers>{children}</Providers>
+        </PrimeReactProvider>
       </body>
     </html>
   );

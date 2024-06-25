@@ -8,15 +8,17 @@ import { classNames } from '@/lib/utils';
 
 type ButtonProps = {
   label: string;
+  type: 'button' | 'submit' | 'reset' | undefined;
   widthType?: 'padding' | 'full';
   isOutline?: boolean;
   classes?: string;
   disabled?: boolean;
-  callBack: () => void;
+  callBack?: () => void;
 };
 
 const Button = ({
   label,
+  type = 'button',
   widthType = 'padding',
   isOutline,
   classes = '',
@@ -25,6 +27,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
+      type={type}
       disabled={disabled}
       className={classNames(
         'font-bold py-1 px-5 rounded-sm',
@@ -32,7 +35,13 @@ const Button = ({
         `${isOutline ? 'border border-primary' : 'bg-primary text-white'}`,
         `${classes}`
       )}
-      onClick={callBack}
+      onClick={() => {
+        if (callBack) {
+          callBack();
+        } else {
+          return;
+        }
+      }}
     >
       {label}
     </button>

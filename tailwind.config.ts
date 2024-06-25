@@ -30,6 +30,7 @@ const config = {
         foreground: 'hsl(var(--foreground))',
         stroke: '#E2E8F0',
         primary: '#3C50E0',
+        error: '#ff3333',
         // primary: {
         //   DEFAULT: 'hsl(var(--primary))',
         //   foreground: 'hsl(var(--primary-foreground))',

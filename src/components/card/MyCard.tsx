@@ -16,8 +16,8 @@ const MyCard = ({ user_name, user_title }: CardType) => {
         <Text label={user_name || '-----'} />
         <Text label={user_title || '-----'} size="sm" classes="text-gray-500" />
         <div className="flex gap-5 mt-4 md:mt-6">
-          <Button label="Edit" callBack={() => {}} />
-          <Button label="View" callBack={() => {}} />
+          <Button type="button" label="Edit" callBack={() => {}} />
+          <Button type="button" label="View" callBack={() => {}} />
         </div>
       </div>
     </div>

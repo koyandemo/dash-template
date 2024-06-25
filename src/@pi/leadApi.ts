@@ -1,8 +1,8 @@
 import { apiConfig } from './apiConfig';
 
 type leadParams = {
-  industry_id: number;
-  country_id: number;
+  industry_id: string;
+  country_id: string;
 };
 
 export const getLeads = async (token: string, params: leadParams) => {

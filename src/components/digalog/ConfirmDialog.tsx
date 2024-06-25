@@ -39,8 +39,13 @@ export function ConfirmDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button label="Cancle" isOutline={true} callBack={handleCancel} />
-          <Button label="Confirm" callBack={handleConfirm} />
+          <Button
+            type="button"
+            label="Cancle"
+            isOutline={true}
+            callBack={handleCancel}
+          />
+          <Button type="button" label="Confirm" callBack={handleConfirm} />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
