@@ -27,6 +27,7 @@ import {
 } from '@/types/lead';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { MultiSelect } from 'primereact/multiselect';
 import { useEffect, useRef, useState } from 'react';
 
@@ -51,17 +52,16 @@ const initFilterData = {
 };
 
 const LeadCollections = () => {
+  const router = useRouter();
   const { data: session } = useSession();
-
-  const [leads, setLeads] = useState<ApiResponse<
-    LeadAlphabetType[] | LeadContactType[]
-  > | null>(null);
-
   const [loading, setLoading] = useState(true);
   const searchRef = useRef<HTMLInputElement | null>(null);
   const [countries, setCountries] = useState<CountryType[]>([]);
   const [industries, setIndustries] = useState<IndustryType[]>([]);
   const [filterData, setFilterData] = useState<FilterDataType>(initFilterData);
+  const [leads, setLeads] = useState<ApiResponse<
+    LeadAlphabetType[] | LeadContactType[]
+  > | null>(null);
 
   useEffect(() => {
     if (session?.user?.token) {
@@ -236,14 +236,6 @@ const LeadCollections = () => {
     );
   };
 
-  // const handleFilter = (type: keyof FilterDataType, value: number) => {
-  //   let data = filterData[type];
-  //   if (Array.isArray(data)) {
-  //     data = [...data, value];
-  //     setFilterData({ ...filterData, [type]: data, open: true });
-  //   }
-  // };
-
   const handleMultiSelectFilter = (type: string, values: string[]) => {
     setFilterData({ ...filterData, [type]: values, open: true });
   };
@@ -253,17 +245,26 @@ const LeadCollections = () => {
       <div className="flex flex-col gap-[30px]">
         <div className="flex justify-between items-center">
           <Text label="Lead Collections" />
-          <SelectDemo
-            label="Sorts"
-            value={filterData.sort}
-            placeHolder="Sorts By :"
-            callBack={(e) => {
-              handleFilter('sort', e);
-            }}
-          >
-            <SelectItem value="az">A-Z</SelectItem>
-            <SelectItem value="recent">Recent</SelectItem>
-          </SelectDemo>
+          <div className="flex gap-[10px]">
+            <Button
+              type="button"
+              label="import"
+              callBack={() => {
+                router.push('/lead-collections/import');
+              }}
+            />
+            <SelectDemo
+              label="Sorts"
+              value={filterData.sort}
+              placeHolder="Sorts By :"
+              callBack={(e) => {
+                handleFilter('sort', e);
+              }}
+            >
+              <SelectItem value="az">A-Z</SelectItem>
+              <SelectItem value="recent">Recent</SelectItem>
+            </SelectDemo>
+          </div>
         </div>
         <div className="flex gap-5 mb-5 pb-8 border-b border-gray-200">
           <div className="max-w-[300px]">
@@ -393,7 +394,6 @@ const LeadCollections = () => {
         </div>
       </div>
       <Table>
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead className="w-[200px]">Profile</TableHead>
@@ -458,3 +458,11 @@ const LeadCollections = () => {
 };
 
 export default LeadCollections;
+
+// const handleFilter = (type: keyof FilterDataType, value: number) => {
+//   let data = filterData[type];
+//   if (Array.isArray(data)) {
+//     data = [...data, value];
+//     setFilterData({ ...filterData, [type]: data, open: true });
+//   }
+// };

@@ -24,7 +24,7 @@ const SelectDemo = ({
 }: SelectDeomType) => {
   return (
     <Select onValueChange={callBack} value={value}>
-      <SelectTrigger className="min-w-[80px] h-[50px]">
+      <SelectTrigger className="min-w-[80px] h-[40px]">
         <SelectValue placeholder={placeHolder} />
       </SelectTrigger>
       <SelectContent>
