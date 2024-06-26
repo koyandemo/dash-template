@@ -87,3 +87,50 @@ body {
 .p-highlight {
   background: unset !important;
 }
+
+.shreScrollBar::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+  border-radius: 10px;
+}
+
+.shreScrollBar::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+}
+
+.cardGrids {
+  max-width: 100%;
+  margin: 0 auto;
+  display: grid;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 600px) {
+  .cardGrids {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .cardGrids {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .cardGrids {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .cardGrids {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .cardGrids {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

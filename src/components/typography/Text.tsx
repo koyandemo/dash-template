@@ -1,9 +1,16 @@
-import { classNames } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 type TextProps = {
   label: string;
-  size?: 'sm' | 'md' | 'lg';
-  weight?: '';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  weight?:
+    | 'extralight'
+    | 'light'
+    | 'normal'
+    | 'medium'
+    | 'semibold'
+    | 'bold'
+    | '';
   active?: boolean;
   classes?: string;
 };
@@ -11,21 +18,25 @@ type TextProps = {
 const Text = ({
   label,
   size = 'md',
+  weight = '',
   active = true,
   classes = '',
 }: TextProps) => {
   const cssNames = [
-    size === 'sm'
-      ? 'text-[12px]'
-      : size === 'md'
-        ? 'text-[18px]'
-        : 'text-[20px]',
+    size === 'xs'
+      ? 'text-[10px]'
+      : size === 'sm'
+        ? 'text-[12px]'
+        : size === 'md'
+          ? 'text-[18px]'
+          : 'text-[20px]',
   ].join(' ');
 
   return (
     <p
-      className={classNames(
-        `${cssNames} font-`,
+      className={cn(
+        `${cssNames}`,
+        `font-${weight}`,
         `${active ? 'text-black font-bold' : 'text-[#4f4f4f]'}`,
         `${classes}`
       )}
