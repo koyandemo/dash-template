@@ -170,12 +170,11 @@ const LeadCollections = () => {
       method: 'GET',
       headers: {
         Authorization: `Bearer ` + token,
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Access-Control-Allow-Credentials': 'true',
-        'Content-Type':
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
       },
-      // mode: 'no-cors',
     })
       .then((res) => res.blob())
       .then((blob) => {
