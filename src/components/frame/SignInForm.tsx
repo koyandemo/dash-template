@@ -4,7 +4,7 @@ import { SignInSchema } from '@/types/schema/authSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Button from '../button/Button';
@@ -13,6 +13,7 @@ import InputHook from '../input/InputHook';
 const SignInForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const {
     register,
@@ -34,11 +35,23 @@ const SignInForm = () => {
           password: value.password,
           redirect: false,
         });
+        if (res?.error) {
+          console.log(res?.error);
+          setErrorMessage('Incorrect email or password.');
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 3000);
+          return;
+        }
         if (!res?.error) {
-          router.push('/');
+          router.push('/my-cards');
         }
       });
     } catch (err) {
+      setErrorMessage('Incorrect email or password.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
       console.error(err);
     }
   };
@@ -71,13 +84,17 @@ const SignInForm = () => {
           Forget Password?
         </a>
       </div>
-      <div className="mt-8 flex flex-col w-full">
+      {errorMessage && (
+        <span className="inline-block text-error text-xs">{errorMessage}</span>
+      )}
+      <div className="mt-8  flex flex-col w-full">
         <Button
           type="submit"
           label={isPending ? 'Loading ...' : 'Login'}
           disabled={isPending}
           width="full"
           height="md"
+          // classes="h-[50px]"
         />
       </div>
       {/* <a

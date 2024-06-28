@@ -26,8 +26,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div className="flex items-center justify-center gap-2 px-6 py-5">
             <Link href="/">
               <Image
-                width={50}
-                height={50}
+                width={70}
+                height={70}
                 src={'/logo-shre.svg'}
                 alt="Logo"
                 priority

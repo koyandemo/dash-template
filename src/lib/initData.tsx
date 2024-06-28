@@ -1,21 +1,15 @@
-import {
-  DashboardIcon,
-  LogoutIcon,
-  ProfileIcon,
-  SettingIcon,
-  TeamIcon,
-} from './shreIcon';
+import { LogoutIcon, ProfileIcon, SettingIcon, TeamIcon } from './shreIcon';
 
 export const menuGroups = [
   {
     menuItems: [
-      {
-        icon: <DashboardIcon />,
-        label: 'Dashboard',
-        route: '/',
-        group: 'dashboard',
-        // children: [{ label: 'eCommerce', route: '/' }],
-      },
+      // {
+      //   icon: <DashboardIcon />,
+      //   label: 'Dashboard',
+      //   route: '/',
+      //   group: 'dashboard',
+      //   // children: [{ label: 'eCommerce', route: '/' }],
+      // },
       {
         icon: <ProfileIcon />,
         label: 'My Cards',

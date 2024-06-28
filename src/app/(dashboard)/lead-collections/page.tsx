@@ -1,6 +1,6 @@
 'use client';
 
-import { getCountries, getIndustries, getLeads } from '@/@pi/leadApi';
+import { getLeadFilterData, getLeads, getLeadsExport } from '@/@pi/leadApi';
 import Button from '@/components/button/Button';
 import ClientContainer from '@/components/ClientContainer';
 import InputRef from '@/components/input/InputRef';
@@ -36,8 +36,8 @@ type FilterDataType = {
   search: string;
   sort: string;
   industry_id: number[];
-  company_id: number[];
-  job_id: number[];
+  company: number[];
+  job_title: number[];
   country_id: number[];
 };
 
@@ -46,8 +46,8 @@ const initFilterData = {
   search: '',
   sort: 'az',
   industry_id: [],
-  company_id: [],
-  job_id: [],
+  company: [],
+  job_title: [],
   country_id: [],
 };
 
@@ -56,6 +56,8 @@ const LeadCollections = () => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
   const searchRef = useRef<HTMLInputElement | null>(null);
+  const [companies, setCompanies] = useState([]);
+  const [jobeTitles, setJobeTitles] = useState([]);
   const [countries, setCountries] = useState<CountryType[]>([]);
   const [industries, setIndustries] = useState<IndustryType[]>([]);
   const [filterData, setFilterData] = useState<FilterDataType>(initFilterData);
@@ -68,14 +70,17 @@ const LeadCollections = () => {
       const token = session?.user?.token;
       fetchLeads(token);
       if (!filterData.open) {
-        fetchCountries(token);
-        fetchIndustries(token);
+        // fetchCountries(token);
+        // fetchIndustries(token);
+        fetchLeadFilterData(token);
       }
     }
   }, [
     session,
     filterData.search,
     filterData.sort,
+    filterData.job_title,
+    filterData.company,
     filterData.industry_id,
     filterData.country_id,
   ]);
@@ -86,6 +91,8 @@ const LeadCollections = () => {
       const params = {
         search: filterData.search,
         sort: filterData.sort === 'az' ? '' : filterData.sort,
+        company: filterData.company.join(),
+        job_title: filterData.job_title.join(),
         industry_id: filterData.industry_id.join(),
         country_id: filterData.country_id.join(),
       };
@@ -100,40 +107,85 @@ const LeadCollections = () => {
     }
   };
 
-  const fetchCountries = async (token: string) => {
+  const fetchLeadFilterData = async (token: string) => {
     try {
-      const res = await getCountries(token);
-      const data = res?.data?.data?.map((data: CountryType) => {
-        return {
-          value: data.id,
-          name:
-            data.name.length > 20
-              ? data.name.slice(0, 20).concat('...')
-              : data.name,
-        };
-      });
-      setCountries(data);
+      const res = await getLeadFilterData(token);
+      if (res?.data?.data) {
+        const { companies, countries, industries, job_titles } = res.data.data;
+        const companyDatas = companies.map((data: string) => {
+          return {
+            value: data,
+            name: data.length > 20 ? data.slice(0, 20).concat('...') : data,
+          };
+        });
+
+        const countryDatas = countries.map((data: CountryType) => {
+          return {
+            value: data.id,
+            name:
+              data.name.length > 20
+                ? data.name.slice(0, 20).concat('...')
+                : data.name,
+          };
+        });
+
+        const industryDatas = industries.map((data: IndustryType) => {
+          return {
+            value: data.id,
+            name:
+              data.name.length > 20
+                ? data.name.slice(0, 20).concat('...')
+                : data.name,
+          };
+        });
+
+        const jobTitleDatas = job_titles.map((data: string) => {
+          return {
+            value: data,
+            name: data.length > 20 ? data.slice(0, 20).concat('...') : data,
+          };
+        });
+        setCountries(countryDatas);
+        setCompanies(companyDatas);
+        setJobeTitles(jobTitleDatas);
+        setIndustries(industryDatas);
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
-  const fetchIndustries = async (token: string) => {
+  const fetchLeadsExport = async (token: string) => {
     try {
-      const res = await getIndustries(token);
-      const data = res?.data?.data?.map((data: IndustryType) => {
-        return {
-          value: data.id,
-          name:
-            data.name.length > 20
-              ? data.name.slice(0, 20).concat('...')
-              : data.name,
-        };
-      });
-      setIndustries(data);
+      const res: Blob = await getLeadsExport(token);
+      console.log(res);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const dowloadFile = async (token: string) => {
+    let url = `https://stg-api.shre.cactusminds.com/leads/exports`;
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ` + token,
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Credentials': 'true',
+        'Content-Type':
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      },
+      // mode: 'no-cors',
+    })
+      .then((res) => res.blob())
+      .then((blob) => {
+        console.log(blob);
+        // var file = window.URL.createObjectURL(blob);
+        // window.location.assign(file);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleFilter = (type: string, value: string | number) => {
@@ -157,8 +209,6 @@ const LeadCollections = () => {
     setFilterData(initFilterData);
   };
 
-  const debounceSearch = debounce(handleSearch, 1000);
-
   const renderTableContact = (contact: LeadContactType, i: number) => {
     return (
       <TableRow
@@ -178,54 +228,44 @@ const LeadCollections = () => {
               }}
               className="relative inline-block  !rounded-full border border-blue-gray-50 bg-blue-gray-50/50 object-cover object-center p-1"
             />
-            <p className="block font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900">
-              {contact.name}
-            </p>
+            <div className="flex flex-col gap-[1px]">
+              <p className="block font-sans text-sm antialiased font-bold leading-normal text-blue-gray-900">
+                {contact.name}
+              </p>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                {contact.email}
+              </p>
+            </div>
           </div>
-        </TableCell>
-        <TableCell>
-          <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            {contact.email}
-          </p>
         </TableCell>
         <TableCell>
           <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
             {contact.phone}
           </p>
+          countries
         </TableCell>
         <TableCell>
           <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
             {contact.industry}
           </p>
-          {/* <div className="w-max">
-                      <div className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20">
-                        <span className="">{contact.industry}</span>
-                      </div>
-                    </div> */}
         </TableCell>
         <TableCell>
-          <div className="flex items-center gap-3">
-            <div className="w-12 p-1 border rounded-md h-9 border-blue-gray-50">
-              {/* <img
-                          src="https://docs.material-tailwind.com/img/logos/logo-spotify.svg"
-                          alt="visa"
-                          className="relative inline-block h-full w-full !rounded-none  object-contain object-center p-1"
-                        /> */}
-            </div>
-            <div className="flex flex-col">
-              <p className="block font-sans text-sm antialiased font-normal leading-normal capitalize text-blue-gray-900">
-                visa 1234
-              </p>
-              <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900 opacity-70">
-                06/2026
-              </p>
-            </div>
-          </div>
+          <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+            {contact.company || '------'}
+          </p>
+        </TableCell>
+        <TableCell>
+          <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+            {contact.job_title}
+          </p>
         </TableCell>
         <TableCell className="text-right">
           <button
             className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             type="button"
+            onClick={() => {
+              alert('Under Development !');
+            }}
           >
             <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
               <MoreIcon />
@@ -240,52 +280,55 @@ const LeadCollections = () => {
     setFilterData({ ...filterData, [type]: values, open: true });
   };
 
+  const debounceSearch = debounce(handleSearch, 1000);
+
   return (
     <ClientContainer>
       <div className="flex flex-col gap-[30px]">
         <div className="flex justify-between items-center">
           <Text label="Lead Collections" />
           <div className="flex gap-[10px]">
+            {filterData.open && (
+              <Button
+                type="button"
+                label="Reset"
+                rounded="full"
+                callBack={() => {
+                  handleReset();
+                }}
+              />
+            )}
+
             <Button
               type="button"
               label="import"
+              rounded="full"
               callBack={() => {
                 router.push('/lead-collections/import');
               }}
             />
-            <SelectDemo
-              label="Sorts"
-              value={filterData.sort}
-              placeHolder="Sorts By :"
-              callBack={(e) => {
-                handleFilter('sort', e);
+            <Button
+              type="button"
+              label="export"
+              rounded="full"
+              callBack={() => {
+                if (session?.user?.token) {
+                  //fetchLeadsExport(session?.user?.token);
+                  dowloadFile(session?.user?.token);
+                }
               }}
-            >
-              <SelectItem value="az">A-Z</SelectItem>
-              <SelectItem value="recent">Recent</SelectItem>
-            </SelectDemo>
+            />
           </div>
         </div>
         <div className="flex gap-5 mb-5 pb-8 border-b border-gray-200">
           <div className="max-w-[300px]">
             <InputRef
               refObj={searchRef}
+              classes="w-[250px]"
               callBack={debounceSearch}
               placeHolder={'search...'}
             />
           </div>
-
-          <MultiSelect
-            optionLabel="name"
-            placeholder="Select Jobs"
-            maxSelectedLabels={3}
-            className="w-[300px]"
-            options={countries}
-            value={filterData.country_id}
-            onChange={(e) => {
-              handleMultiSelectFilter('job_id', e.target.value);
-            }}
-          />
 
           <MultiSelect
             optionLabel="name"
@@ -301,13 +344,25 @@ const LeadCollections = () => {
 
           <MultiSelect
             optionLabel="name"
-            placeholder="Select Lead Companies"
+            placeholder="Select Companies"
             maxSelectedLabels={3}
             className="w-[300px]"
-            options={countries}
-            value={filterData.country_id}
+            options={companies}
+            value={filterData.company}
             onChange={(e) => {
-              handleMultiSelectFilter('company_id', e.target.value);
+              handleMultiSelectFilter('company', e.target.value);
+            }}
+          />
+
+          <MultiSelect
+            optionLabel="name"
+            placeholder="Select Jobs"
+            maxSelectedLabels={3}
+            className="w-[300px]"
+            options={jobeTitles}
+            value={filterData.job_title}
+            onChange={(e) => {
+              handleMultiSelectFilter('job_title', e.target.value);
             }}
           />
 
@@ -322,85 +377,27 @@ const LeadCollections = () => {
               handleMultiSelectFilter('country_id', e.target.value);
             }}
           />
-
-          {/* <SelectDemo
-            placeHolder="Select a Job Title"
-            value={filterData.job_id.toString()}
-            label="Jobs"
-            callBack={(e) => {
-              handleFilter('job', e);
-            }}
-          >
-            <SelectItem value={'0'}>Select a Job Title</SelectItem>
-            <SelectItem value="apple">Apple</SelectItem>
-          </SelectDemo>
-
           <SelectDemo
-            placeHolder="Select a Industry"
-            label="Industries"
-            value={filterData.industry_id.toString()}
+            label="Sorts"
+            value={filterData.sort}
+            placeHolder="Sorts By :"
             callBack={(e) => {
-              handleFilter('industry_id', e);
+              handleFilter('sort', e);
             }}
           >
-            <SelectItem value={'0'}>Select a Industry</SelectItem>
-            {industries.length > 0 &&
-              industries.map((industry: any) => (
-                <SelectItem value={industry.id.toString()} key={industry.id}>
-                  {industry.name}
-                </SelectItem>
-              ))}
+            <SelectItem value="az">A-Z</SelectItem>
+            <SelectItem value="recent">Recent</SelectItem>
           </SelectDemo>
-
-          <SelectDemo
-            placeHolder="Select a Lead's Company"
-            label="Lead companies"
-            value={filterData.company_id.toString()}
-            callBack={(e) => {
-              'apple';
-              handleFilter('company', e);
-            }}
-          >
-            <SelectItem value="0">{"Select a Lead's Company"}</SelectItem>
-            <SelectItem value="apple">Apple</SelectItem>
-          </SelectDemo>
-
-          <SelectDemo
-            placeHolder="Select a Country"
-            label="Countries"
-            value={filterData.country_id.toString()}
-            callBack={(e) => {
-              handleFilter('country_id', e);
-            }}
-          >
-            . <SelectItem value="0">Select a Country</SelectItem>
-            {countries.length > 0 &&
-              countries.map((country: any) => (
-                <SelectItem value={country.id.toString()} key={country.id}>
-                  {country.name}
-                </SelectItem>
-              ))}
-          </SelectDemo> */}
-
-          {filterData.open && (
-            <Button
-              type="button"
-              label="Reset"
-              callBack={() => {
-                handleReset();
-              }}
-            />
-          )}
         </div>
       </div>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[200px]">Profile</TableHead>
-            <TableHead>Email</TableHead>
             <TableHead>Phone Number</TableHead>
             <TableHead>Industry</TableHead>
-            <TableHead>Socials</TableHead>
+            <TableHead>Company</TableHead>
+            <TableHead>Job Title</TableHead>
             <TableHead className="text-right">Edit</TableHead>
           </TableRow>
         </TableHeader>
@@ -459,10 +456,99 @@ const LeadCollections = () => {
 
 export default LeadCollections;
 
-// const handleFilter = (type: keyof FilterDataType, value: number) => {
-//   let data = filterData[type];
-//   if (Array.isArray(data)) {
-//     data = [...data, value];
-//     setFilterData({ ...filterData, [type]: data, open: true });
+{
+  /* <SelectDemo
+            placeHolder="Select a Job Title"
+            value={filterData.job_id.toString()}
+            label="Jobs"
+            callBack={(e) => {
+              handleFilter('job', e);
+            }}
+          >
+            <SelectItem value={'0'}>Select a Job Title</SelectItem>
+            <SelectItem value="apple">Apple</SelectItem>
+          </SelectDemo>
+
+          <SelectDemo
+            placeHolder="Select a Industry"
+            label="Industries"
+            value={filterData.industry_id.toString()}
+            callBack={(e) => {
+              handleFilter('industry_id', e);
+            }}
+          >
+            <SelectItem value={'0'}>Select a Industry</SelectItem>
+            {industries.length > 0 &&
+              industries.map((industry: any) => (
+                <SelectItem value={industry.id.toString()} key={industry.id}>
+                  {industry.name}
+                </SelectItem>
+              ))}
+          </SelectDemo>
+
+          <SelectDemo
+            placeHolder="Select a Lead's Company"
+            label="Lead companies"
+            value={filterData.company_id.toString()}
+            callBack={(e) => {
+              'apple';
+              handleFilter('company', e);
+            }}
+          >
+            <SelectItem value="0">{"Select a Lead's Company"}</SelectItem>
+            <SelectItem value="apple">Apple</SelectItem>
+          </SelectDemo>
+
+          <SelectDemo
+            placeHolder="Select a Country"
+            label="Countries"
+            value={filterData.country_id.toString()}
+            callBack={(e) => {
+              handleFilter('country_id', e);
+            }}
+          >
+            . <SelectItem value="0">Select a Country</SelectItem>
+            {countries.length > 0 &&
+              countries.map((country: any) => (
+                <SelectItem value={country.id.toString()} key={country.id}>
+                  {country.name}
+                </SelectItem>
+              ))}
+          </SelectDemo> */
+}
+
+// const fetchCountries = async (token: string) => {
+//   try {
+//     const res = await getCountries(token);
+//     const data = res?.data?.data?.map((data: CountryType) => {
+//       return {
+//         value: data.id,
+//         name:
+//           data.name.length > 20
+//             ? data.name.slice(0, 20).concat('...')
+//             : data.name,
+//       };
+//     });
+//     setCountries(data);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+// const fetchIndustries = async (token: string) => {
+//   try {
+//     const res = await getIndustries(token);
+//     const data = res?.data?.data?.map((data: IndustryType) => {
+//       return {
+//         value: data.id,
+//         name:
+//           data.name.length > 20
+//             ? data.name.slice(0, 20).concat('...')
+//             : data.name,
+//       };
+//     });
+//     setIndustries(data);
+//   } catch (err) {
+//     console.error(err);
 //   }
 // };

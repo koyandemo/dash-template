@@ -1,3 +1,4 @@
+import getErrorMessage from '@/lib/getErrorMessage';
 import { loginUserType, UserType } from '@/types/auth';
 import { apiConfig } from './apiConfig';
 
@@ -20,7 +21,7 @@ export const logInUser = async (
       throw new Error(res.data.message);
     }
   } catch (err) {
-    throw new Error('');
+    throw new Error(getErrorMessage(err));
   }
 };
 
@@ -32,7 +33,6 @@ export const signInUser = async (payload: loginUserType) => {
     });
     return res.data.data;
   } catch (error) {
-    console.error(error);
-    return '/auth/login?errorMsg=hi';
+    console.error(error, 'error');
   }
 };

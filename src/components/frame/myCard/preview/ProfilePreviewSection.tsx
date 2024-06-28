@@ -39,7 +39,7 @@ const ProfilePreviewSection = () => {
       <div className="flex w-full justify-center gap-5 mt-4 md:mt-6">
         <Button
           type="button"
-          label="Edit"
+          label="Save"
           rounded="full"
           height="md"
           classes="w-[185px]"
@@ -47,7 +47,7 @@ const ProfilePreviewSection = () => {
         />
         <Button
           type="button"
-          label="View"
+          label="Exchange"
           rounded="full"
           classes="w-[185px]"
           callBack={() => {}}
