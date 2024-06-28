@@ -70,8 +70,6 @@ const LeadCollections = () => {
       const token = session?.user?.token;
       fetchLeads(token);
       if (!filterData.open) {
-        // fetchCountries(token);
-        // fetchIndustries(token);
         fetchLeadFilterData(token);
       }
     }
@@ -282,6 +280,8 @@ const LeadCollections = () => {
   const debounceSearch = debounce(handleSearch, 1000);
 
   return (
+    // fetchCountries(token);
+    // fetchIndustries(token);
     <ClientContainer>
       <div className="flex flex-col gap-[30px]">
         <div className="flex justify-between items-center">
@@ -298,7 +298,7 @@ const LeadCollections = () => {
               />
             )}
 
-            <Button
+            {/* <Button
               type="button"
               label="import"
               rounded="full"
@@ -313,10 +313,10 @@ const LeadCollections = () => {
               callBack={() => {
                 if (session?.user?.token) {
                   //fetchLeadsExport(session?.user?.token);
-                  dowloadFile(session?.user?.token);
+                  //dowloadFile(session?.user?.token);
                 }
               }}
-            />
+            /> */}
           </div>
         </div>
         <div className="flex gap-5 mb-5 pb-8 border-b border-gray-200">
@@ -454,67 +454,6 @@ const LeadCollections = () => {
 };
 
 export default LeadCollections;
-
-{
-  /* <SelectDemo
-            placeHolder="Select a Job Title"
-            value={filterData.job_id.toString()}
-            label="Jobs"
-            callBack={(e) => {
-              handleFilter('job', e);
-            }}
-          >
-            <SelectItem value={'0'}>Select a Job Title</SelectItem>
-            <SelectItem value="apple">Apple</SelectItem>
-          </SelectDemo>
-
-          <SelectDemo
-            placeHolder="Select a Industry"
-            label="Industries"
-            value={filterData.industry_id.toString()}
-            callBack={(e) => {
-              handleFilter('industry_id', e);
-            }}
-          >
-            <SelectItem value={'0'}>Select a Industry</SelectItem>
-            {industries.length > 0 &&
-              industries.map((industry: any) => (
-                <SelectItem value={industry.id.toString()} key={industry.id}>
-                  {industry.name}
-                </SelectItem>
-              ))}
-          </SelectDemo>
-
-          <SelectDemo
-            placeHolder="Select a Lead's Company"
-            label="Lead companies"
-            value={filterData.company_id.toString()}
-            callBack={(e) => {
-              'apple';
-              handleFilter('company', e);
-            }}
-          >
-            <SelectItem value="0">{"Select a Lead's Company"}</SelectItem>
-            <SelectItem value="apple">Apple</SelectItem>
-          </SelectDemo>
-
-          <SelectDemo
-            placeHolder="Select a Country"
-            label="Countries"
-            value={filterData.country_id.toString()}
-            callBack={(e) => {
-              handleFilter('country_id', e);
-            }}
-          >
-            . <SelectItem value="0">Select a Country</SelectItem>
-            {countries.length > 0 &&
-              countries.map((country: any) => (
-                <SelectItem value={country.id.toString()} key={country.id}>
-                  {country.name}
-                </SelectItem>
-              ))}
-          </SelectDemo> */
-}
 
 // const fetchCountries = async (token: string) => {
 //   try {
