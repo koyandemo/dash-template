@@ -1,15 +1,11 @@
-import { classNames } from '@/lib/utils';
-
-// enum widthTypeEnum {
-//   padding = 'padding',
-//   fixed = 'fixed',
-//   full = 'full',
-// }
+import { cn } from '@/lib/utils';
 
 type ButtonProps = {
   label: string;
   type: 'button' | 'submit' | 'reset' | undefined;
-  widthType?: 'padding' | 'full';
+  rounded?: 'sm' | 'md' | 'full';
+  width?: 'auto' | 'full';
+  height?: 'sm' | 'md';
   isOutline?: boolean;
   classes?: string;
   disabled?: boolean;
@@ -19,7 +15,9 @@ type ButtonProps = {
 const Button = ({
   label,
   type = 'button',
-  widthType = 'padding',
+  rounded = 'sm',
+  width = 'auto',
+  height = 'sm',
   isOutline,
   classes = '',
   disabled = false,
@@ -29,10 +27,12 @@ const Button = ({
     <button
       type={type}
       disabled={disabled}
-      className={classNames(
-        'font-bold py-1 px-5 rounded-sm',
-        `${widthType === 'full' ? 'w-full' : ''}`,
-        `${isOutline ? 'border border-primary' : 'bg-primary text-white'}`,
+      className={cn(
+        'font-bold py-1 px-5',
+        `rounded-${rounded}`,
+        `w-[${width === 'auto' ? 'auto' : 'full'}]`,
+        `h-[${height === 'sm' ? '32px' : '50px'}]`,
+        `${isOutline ? 'border border-primary border-2 text-primary' : 'bg-primary text-white'}`,
         `${classes}`
       )}
       onClick={() => {

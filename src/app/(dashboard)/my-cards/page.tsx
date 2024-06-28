@@ -9,15 +9,6 @@ import { ApiResponse } from '@/types/init';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
-// const fetchMyCards = async (): Promise<ApiResponse<CardType[]>> => {
-//   try {
-//     const res = await getCards();
-//     return { error: false, data: res?.data?.data, message: '' };
-//   } catch (err) {
-//     return { error: true, data: null, message: getErrorMessage(err) };
-//   }
-// };
-
 const MyCardsPage = () => {
   const { data: session } = useSession();
   const [cards, setCards] = useState<ApiResponse<CardType[]> | null>(null);
@@ -41,7 +32,7 @@ const MyCardsPage = () => {
   };
 
   return (
-    <div className="grid gap-5 justify-between grid-cols-[repeat(auto-fill,minmax(280px,280px))]">
+    <div className="grid gap-5 justify-between cardGrids">
       <MyNewCard />
       {cards &&
         !cards.error &&

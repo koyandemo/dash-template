@@ -1,11 +1,10 @@
 'use client';
 
-import { GoogleIcon } from '@/lib/shreIcon';
 import { SignInSchema } from '@/types/schema/authSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Button from '../button/Button';
@@ -14,10 +13,7 @@ import InputHook from '../input/InputHook';
 const SignInForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  // const [authData, setAuthData] = useState({
-  //   email: '',
-  //   password: '',
-  // });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const {
     register,
@@ -39,38 +35,44 @@ const SignInForm = () => {
           password: value.password,
           redirect: false,
         });
+        if (res?.error) {
+          console.log(res?.error);
+          setErrorMessage('Incorrect email or password.');
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 3000);
+          return;
+        }
         if (!res?.error) {
-          router.push('/');
+          router.push('/my-cards');
         }
       });
     } catch (err) {
+      setErrorMessage('Incorrect email or password.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
       console.error(err);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(handleLogin)}>
-      <div className="mt-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Email
-        </label>
+      <div className="mt-4 w-full">
         <InputHook
           id="email"
           type="email"
+          label="Email"
           placeholder="Email"
           register={register('email', { required: true })}
           error={errors['email']}
         />
       </div>
       <div className="mt-4 flex flex-col justify-between">
-        <div className="flex justify-between">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Password
-          </label>
-        </div>
         <InputHook
           id="password"
           type="password"
+          label="Password"
           placeholder="********"
           register={register('password', { required: true })}
           error={errors['password']}
@@ -82,16 +84,20 @@ const SignInForm = () => {
           Forget Password?
         </a>
       </div>
-      <div className="mt-8">
+      {errorMessage && (
+        <span className="inline-block text-error text-xs">{errorMessage}</span>
+      )}
+      <div className="mt-8  flex flex-col w-full">
         <Button
           type="submit"
           label={isPending ? 'Loading ...' : 'Login'}
           disabled={isPending}
-          widthType="full"
-          classes="h-[45px]"
+          width="full"
+          height="md"
+          // classes="h-[50px]"
         />
       </div>
-      <a
+      {/* <a
         href="#"
         className=" flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100"
       >
@@ -105,7 +111,7 @@ const SignInForm = () => {
             </h1>
           </div>
         </div>
-      </a>
+      </a> */}
     </form>
   );
 };

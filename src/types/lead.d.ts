@@ -48,6 +48,10 @@ export type CountryType = {
   name: string;
 };
 
+export type CompanyType = {
+  name: string;
+};
+
 export type IndustryType = {
   id: number;
   name: string;

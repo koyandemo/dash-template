@@ -9,6 +9,7 @@ type itemType = {
   icon: ReactNode;
   label: string;
   route: string;
+  group: string;
 };
 
 interface SidebarItemProps {
@@ -29,7 +30,8 @@ const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
   const pathname = usePathname();
 
   const isActive = (item: itemType) => {
-    if (item.route === pathname) return true;
+    if (pathname === '/' && item.group === 'dashboard') return true;
+    if (pathname.includes(item.group)) return true;
     // if (item.children) {
     //   return item.children.some((child: any) => isActive(child));
     // }
@@ -42,7 +44,6 @@ const SidebarItem = ({ item, pageName, setPageName }: SidebarItemProps) => {
     <>
       <li>
         <div
-          // href={item.route}
           onClick={handleClick}
           className={classNames(
             'group relative flex items-center  gap-[20px] rounded-sm px-4 py-3 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 cursor-pointer',
